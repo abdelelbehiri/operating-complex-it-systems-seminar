@@ -1,0 +1,23 @@
+---
+    name: "monitor_disk_space"
+    pack: "university"
+    description: "rule to implement the use case of no space"
+    enabled: true
+
+    trigger:
+        type: "core.st2.webhook"
+        parameters:
+            url: "dir-status"
+
+    criteria:
+        trigger.body.name:
+            pattern: "warn"
+            type: "equals"
+        trigger.body.size:
+            pattern: 10
+            type: "greaterthan"
+
+    action:
+        ref: "core.local_sudo"
+        parameters:
+            cmd: "mv /home/abdel/Desktop/internal_storage/* /home/abdel/Desktop/external_storage"
